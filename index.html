@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>フレットトレーナー｜5弦・6弦のルート音を覚える【プロ監修・無料】- ギタースクールTSG</title>
+<meta name="description" content="ギター指板の5弦・6弦の音名を、タップで答えて覚える無料Webアプリ。セーハコードのルート探しが速くなる。4拍チャレンジ・苦手マップ付き。スマホ対応。ギタースクールTSG提供。監修：杉山つよし。">
+<link rel="icon" type="image/png" sizes="64x64" href="images/favicon-64.png">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FretTrainer">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!-- 公開URL・紹介画像は仮（公開時に確定させる） -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="フレットトレーナー【プロ監修・無料】- ギタースクールTSG">
+<meta property="og:description" content="ギター指板の5弦・6弦の音名を、タップで答えて覚える無料Webアプリ。セーハコードのルート探しが速くなる。ギタースクールTSG提供。監修：杉山つよし。">
+<meta property="og:url" content="https://fret.tsg-gt.com">
+<meta property="og:image" content="https://fret.tsg-gt.com/images/icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1a2e;
+  --ink2: #44495c;
+  --muted: #7a8094;
+  --bg: #f0f2f5;
+  --card: #ffffff;
+  --line: #e0e3ea;
+  --soft: #f7f8fa;
+  --blue: #2176ae;
+  --red: #c0392b;
+  --green: #27ae60;
+  --amber: #e2a10f;
+  --s6: #2176ae;
+  --s5: #d9822b;
+  --s4: #138d90;
+  --s3: #7d4fb0;
+  --s2: #c2417f;
+  --s1: #8a6d1f;
+  --gold: #f2b705;
+  --warn: #e67e22;
+  --radius: 16px;
+  --num: "Oswald", "Barlow Semi Condensed", "Arial Narrow", sans-serif;
+  --jp: "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--jp);
+  font-size: 15px;
+  line-height: 1.55;
+  min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+[hidden] { display: none !important; }
+
+/* ---------- ヘッダー（TSGアプリ共通の形） ---------- */
+.top { background: var(--ink); color: #fff; position: sticky; top: 0; z-index: 20; }
+.top-in {
+  max-width: 980px; margin: 0 auto;
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px; min-height: 64px;
+}
+.brand { display: inline-flex; align-items: flex-end; gap: 10px; color: inherit; text-decoration: none; min-width: 0; }
+.brand-main {
+  font-family: "Oswald", sans-serif; font-size: 2.1rem; font-weight: 700; line-height: 1;
+  letter-spacing: .02em; display: flex; align-items: flex-end; gap: 7px;
+}
+.brand-main svg { display: block; opacity: .92; filter: drop-shadow(0 2px 6px rgba(0,0,0,.3)); }
+.brand-right { padding-bottom: 3px; border-bottom: 2.5px solid var(--red); text-align: left; }
+.brand-sub1-row { white-space: nowrap; display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
+.brand-sub1 { font-family: "Oswald", sans-serif; font-size: .7rem; letter-spacing: .22em; color: var(--red); text-transform: uppercase; line-height: 1.2; }
+.brand-sub2 { font-family: "Oswald", sans-serif; font-size: 1.05rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; line-height: 1.2; white-space: nowrap; }
+.brand-note { font-size: .6rem; color: rgba(255,255,255,.45); letter-spacing: .05em; white-space: nowrap; }
+
+.top-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex: none; }
+.counter { font-family: var(--num); font-size: 19px; letter-spacing: .04em; white-space: nowrap; }
+.counter small { color: #a9adc1; font-size: 14px; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid #4b4f68; background: transparent; color: #e6e8f0;
+  display: grid; place-items: center; padding: 0;
+}
+.icon-btn:hover { background: #2a2a44; }
+.icon-btn svg { width: 18px; height: 18px; }
+.icon-btn[aria-pressed="false"] { color: #8d91a6; }
+.help-btn {
+  background: linear-gradient(to bottom, #d44235, #a82b1e);
+  color: #fff; border: 1px solid #8e1a13; border-radius: 7px;
+  padding: 5px 9px; font-size: .74rem; font-weight: 700; letter-spacing: .05em;
+  box-shadow: 0 3px 0 #6e1410, 0 1px 4px rgba(0,0,0,.25);
+  white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;
+}
+.help-btn:active { box-shadow: 0 0 0 #6e1410; transform: translateY(3px); }
+.help-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 13px; height: 13px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.75); font-size: .62rem; font-weight: 800; line-height: 1;
+}
+.quit { border: 1px solid #4b4f68; background: transparent; color: #d6d8e4; border-radius: 999px; padding: 5px 12px; font-size: 13px; white-space: nowrap; }
+.quit:hover { background: #2a2a44; }
+
+main { max-width: 980px; margin: 0 auto; padding: 14px 16px 8px; }
+
+.card {
+  background: var(--card); border-radius: var(--radius);
+  box-shadow: 0 1px 2px rgba(26,26,46,.06), 0 4px 16px rgba(26,26,46,.05);
+}
+
+/* ---------- 設定 ---------- */
+.setup { padding: 16px; }
+.lead { margin: 0 0 12px; font-size: 15px; color: var(--ink2); }
+.lead b { color: var(--ink); }
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; }
+.opt-label { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .08em; margin-bottom: 6px; }
+.seg { display: flex; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 3px; gap: 3px; }
+.seg button {
+  flex: 1 1 0; min-width: 0; border: 0; background: transparent; border-radius: 9px;
+  padding: 8px 6px; min-height: 44px; font-weight: 700; font-size: 15px; line-height: 1.2; color: var(--ink2);
+}
+.seg button small { display: block; font-weight: 500; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.seg button[aria-pressed="true"] small { color: #c9cbe0; }
+.seg button .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: 1px; }
+.dot.s6, .chip.s6[aria-pressed="true"] { background: var(--s6); } .dot.s5, .chip.s5[aria-pressed="true"] { background: var(--s5); }
+.chip.s4[aria-pressed="true"] { background: var(--s4); } .chip.s3[aria-pressed="true"] { background: var(--s3); }
+.chip.s2[aria-pressed="true"] { background: var(--s2); } .chip.s1[aria-pressed="true"] { background: var(--s1); }
+.seg-sm { border-radius: 10px; padding: 2px; }
+.seg-sm button { min-height: 32px; padding: 4px 10px; font-size: 12.5px; border-radius: 8px; }
+
+.tempo { grid-column: 1 / -1; }
+.tempo-row { display: flex; align-items: center; gap: 10px; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; }
+.tempo-row .step { width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid var(--line); background: #fff; font-size: 20px; font-weight: 700; line-height: 1; }
+.tempo-row input[type=range] { flex: 1; min-width: 0; accent-color: var(--ink); }
+.bpm { font-family: var(--num); font-size: 26px; font-weight: 600; min-width: 64px; text-align: center; line-height: 1; }
+.bpm small { display: block; font-size: 10px; letter-spacing: .12em; color: var(--muted); font-weight: 500; }
+.tempo-note { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.start-row { display: flex; align-items: center; gap: 14px; margin-top: 16px; }
+.start {
+  flex: 1; border: 0; border-radius: 14px; background: var(--red); color: #fff;
+  font-size: 19px; font-weight: 800; letter-spacing: .1em; padding: 14px 18px; min-height: 58px;
+  box-shadow: 0 4px 0 #8e2a20;
+}
+.start:active { transform: translateY(3px); box-shadow: 0 1px 0 #8e2a20; }
+.start small { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .04em; opacity: .85; margin-top: 2px; }
+.best { font-size: 12px; color: var(--muted); line-height: 1.4; min-width: 0; }
+.best b { font-family: var(--num); font-size: 16px; color: var(--ink); font-weight: 600; }
+
+/* ---------- 上段：タブ＋答え方（1行） ---------- */
+.home-top { display: flex; align-items: center; gap: 10px 14px; margin-bottom: 12px; flex-wrap: wrap; }
+.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 3px; flex: 0 1 360px; }
+.tab { border: 0; background: transparent; border-radius: 9px; min-height: 40px; padding: 0 14px; font-size: 15px; font-weight: 800; color: var(--ink2); white-space: nowrap; }
+.tab[aria-selected="true"] { background: var(--ink); color: #fff; box-shadow: 0 2px 6px rgba(26,26,46,.25); }
+.answer { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.answer .lbl { font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.answer .seg { padding: 2px; border-radius: 10px; }
+.answer .seg button { min-height: 36px; padding: 4px 12px; font-size: 13px; border-radius: 8px; white-space: nowrap; flex: 0 0 auto; }
+.mic-note { margin: -4px 2px 12px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+.mic-note b { color: var(--ink2); }
+.pane[hidden] { display: none !important; }
+
+/* ---------- ステージマップ ---------- */
+.st-map-head { display: flex; align-items: baseline; gap: 10px; margin: 0 2px 6px; }
+.st-map-title { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: .08em; }
+.st-total { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.st-total b { font-family: var(--num); font-size: 17px; color: var(--ink); font-weight: 600; }
+.st-total .star { color: var(--gold); }
+.st-map { display: flex; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 12px; }
+.st-group { display: flex; flex-direction: column; gap: 4px; }
+.st-group-lbl { font-size: 10.5px; font-weight: 800; color: var(--muted); white-space: nowrap; }
+.st-group-lbl b { font-family: var(--num); color: var(--ink2); margin-right: 4px; letter-spacing: .08em; }
+.st-nodes { display: flex; gap: 5px; }
+.st-node {
+  position: relative; width: 44px; height: 48px; padding: 0; border-radius: 10px;
+  border: 1px solid var(--line); background: #fff;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+}
+.st-node .n { font-family: var(--num); font-size: 19px; font-weight: 600; line-height: 1; color: var(--ink); }
+.st-node .s { font-size: 9px; line-height: 1; color: var(--gold); letter-spacing: 0; }
+.st-node .s .off { color: #dfe2e9; }
+.st-node .b { position: absolute; top: 2px; right: 4px; font-size: 9px; color: var(--muted); }
+.st-node .gt { position: absolute; top: 1px; left: 3px; font-size: 9px; }
+.st-node.cleared { background: #fffcef; border-color: #f0d58a; }
+.st-node.final { border-color: var(--gold); border-width: 2px; }
+.st-node.locked { background: var(--soft); border-style: dashed; }
+.st-node.locked .n { color: #b5bac7; }
+.st-node.locked .s { font-size: 10px; filter: grayscale(1); opacity: .6; }
+.st-node.sel { background: var(--ink); border-color: var(--ink); box-shadow: 0 3px 8px rgba(26,26,46,.3); }
+.st-node.sel .n, .st-node.sel .b { color: #fff; }
+.st-node.sel .s .off { color: #4b4f68; }
+
+/* 選んだステージ（説明＋スタートを1枚の帯に） */
+.st-detail { display: flex; align-items: center; gap: 14px; border: 1px solid var(--line); border-left: 4px solid var(--red); border-radius: 12px; padding: 10px 12px 10px 14px; background: var(--soft); scroll-margin-top: 80px; }
+.st-d-main { flex: 1; min-width: 0; }
+.st-d-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.st-num { font-family: var(--num); font-size: 14px; font-weight: 700; letter-spacing: .12em; color: var(--red); white-space: nowrap; }
+.st-d-title { font-size: 15.5px; font-weight: 800; }
+.st-d-stars { font-size: 15px; letter-spacing: 1px; color: var(--gold); white-space: nowrap; }
+.st-d-stars .off { color: #d5d9e2; }
+.st-d-intro { margin: 3px 0 0; font-size: 13px; color: var(--ink2); }
+.st-d-rule { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.st-d-strings { display: inline-flex; gap: 3px; }
+.st-d-strings i { font-style: normal; font-family: var(--num); font-size: 12px; font-weight: 600; color: #fff; border-radius: 4px; padding: 0 5px; line-height: 18px; }
+.st-detail .start { flex: 0 0 auto; min-height: 56px; padding: 10px 24px; font-size: 17px; }
+.st-hint { font-size: 12px; color: var(--muted); margin: 8px 2px 0; }
+.st-hint button { border: 0; background: none; color: var(--blue); font-weight: 700; padding: 0; text-decoration: underline; font-size: inherit; }
+
+/* ---------- フリー練習（詰めた配置） ---------- */
+.free-strings { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.free-row { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 10px 14px; margin-top: 12px; }
+.seg.compact button { min-height: 40px; font-size: 14px; padding: 6px; }
+.seg.compact button small { display: inline; margin: 0 0 0 2px; font-size: 11px; }
+.free-pane .tempo { margin-top: 12px; }
+.free-pane .start-row { margin-top: 14px; }
+
+/* ---------- フリー練習：弦の選択 ---------- */
+.span2 { grid-column: 1 / -1; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.chip {
+  width: 46px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--soft);
+  font-family: var(--num); font-size: 18px; font-weight: 600; color: #8d93a4;
+}
+.chip small { font-family: var(--jp); font-size: 11px; font-weight: 700; }
+.chip[aria-pressed="true"] { color: #fff; border-color: transparent; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.presets { display: flex; gap: 6px; flex-wrap: wrap; }
+.preset { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 12.5px; font-weight: 700; color: var(--ink2); min-height: 34px; }
+
+/* ---------- マイクの聞き取り表示 ---------- */
+.mic-live { display: inline-flex; align-items: center; gap: 8px; color: var(--ink2); }
+.mic-live .lv { width: 46px; height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; display: inline-block; }
+.mic-live .lv i { display: block; height: 100%; width: 0; background: var(--green); transition: width .05s; }
+.mic-live .hz { font-family: var(--num); font-size: 18px; font-weight: 600; color: var(--ink); min-width: 38px; }
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 12px; font-size: 13.5px; z-index: 1100; max-width: calc(100% - 32px); box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+
+/* ---------- 出題カード ---------- */
+.quiz { padding: 12px 16px 10px; }
+.q-row { display: flex; align-items: center; gap: 12px; min-height: 78px; }
+.q-main { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.sbadge { font-family: var(--num); font-weight: 600; font-size: 24px; color: #fff; border-radius: 12px; padding: 4px 12px; line-height: 1.25; white-space: nowrap; }
+.sbadge small { font-family: var(--jp); font-size: 15px; font-weight: 700; margin-left: 1px; }
+.sbadge.s6 { background: var(--s6); } .sbadge.s5 { background: var(--s5); } .sbadge.s4 { background: var(--s4); }
+.sbadge.s3 { background: var(--s3); } .sbadge.s2 { background: var(--s2); } .sbadge.s1 { background: var(--s1); }
+.q-of { font-size: 16px; font-weight: 700; color: var(--ink2); }
+.q-note { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.q-note .nm { font-family: var(--num); font-weight: 700; font-size: 58px; letter-spacing: .01em; }
+.q-note .kn { font-size: 12px; color: var(--muted); font-weight: 700; margin-top: 3px; }
+.acc { font-family: var(--jp); font-size: .52em; font-weight: 700; vertical-align: .72em; margin-left: -.04em; line-height: 0; }
+.fb-text .sub .acc { font-size: .72em; margin-left: 0; }
+.q-ask { font-size: 16px; font-weight: 700; color: var(--ink2); white-space: nowrap; }
+.q-count { font-size: 18px; font-weight: 700; color: var(--ink2); }
+.q-count .big { font-family: var(--num); font-size: 52px; color: var(--ink); margin-left: 8px; vertical-align: -6px; }
+.q-main.pop { animation: qpop .22s ease-out; }
+@keyframes qpop { from { transform: translateY(6px); opacity: .2; } to { transform: none; opacity: 1; } }
+
+.dots { margin-left: auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 5px; max-width: 46%; }
+.dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); display: block; }
+.dots i.cur { background: #fff; box-shadow: 0 0 0 2px var(--ink); }
+.dots i.ok { background: var(--green); }
+.dots i.ng { background: var(--red); }
+
+.feedback { display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--line); margin-top: 8px; padding-top: 8px; min-height: 60px; }
+.fb-text { flex: 1; min-width: 0; font-size: 14px; line-height: 1.45; color: var(--ink2); }
+.fb-text b.ok { color: var(--green); font-size: 16px; }
+.fb-text b.ng { color: var(--red); font-size: 16px; }
+.fb-text .sub { display: block; font-size: 12.5px; color: var(--muted); }
+.fb-text .sub b { color: var(--ink); font-family: var(--num); font-size: 15px; font-weight: 600; letter-spacing: .02em; }
+.fb-text .hint { color: var(--muted); }
+.next { flex: none; border: 0; border-radius: 12px; background: var(--ink); color: #fff; font-weight: 800; padding: 10px 18px; min-height: 46px; font-size: 15px; }
+
+/* ---------- 拍表示 ---------- */
+.beats { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.beats .state { flex: none; width: 74px; text-align: center; font-size: 13px; font-weight: 800; letter-spacing: .04em; color: var(--ink2); }
+.cells { flex: 1; position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.cell {
+  height: 34px; border-radius: 9px; background: var(--soft); border: 1px solid var(--line);
+  display: grid; place-items: center; font-family: var(--num); font-size: 17px; font-weight: 600; color: #b3b8c6;
+  transition: background .08s, color .08s, transform .08s;
+}
+.cell.now { color: var(--ink); background: #fff; border-color: var(--ink); transform: scale(1.04); }
+.beats[data-state="ask"] .cell.past { background: #dfe9f3; color: var(--blue); border-color: #c4d7ea; }
+.beats[data-state="ask"] .cell.now { background: var(--blue); color: #fff; border-color: var(--blue); }
+.beats[data-state="ask"] .cell:nth-child(4).now { background: var(--warn); border-color: var(--warn); }
+.beats[data-state="count"] .cell.now { background: var(--ink); color: #fff; }
+.cell.ok { background: var(--green) !important; color: #fff !important; border-color: var(--green) !important; }
+.cell.ng { background: var(--red) !important; color: #fff !important; border-color: var(--red) !important; }
+.timebar { position: absolute; left: 0; right: 0; bottom: -7px; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.timebar i { display: block; height: 100%; width: 100%; background: var(--blue); transform-origin: left center; transform: scaleX(0); }
+.beats[data-state="ask"] .timebar i.low { background: var(--warn); }
+
+/* ---------- 結果 ---------- */
+.result { padding: 16px; }
+.res-top { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.score { display: flex; align-items: baseline; gap: 6px; font-family: var(--num); }
+.score .n { font-size: 64px; font-weight: 700; line-height: 1; }
+.score .d { font-size: 26px; color: var(--muted); }
+.res-msg { min-width: 0; flex: 1; }
+.res-msg h2 { margin: 0; font-size: 20px; }
+.res-stars { font-size: 30px; letter-spacing: 4px; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+.res-stars .off { color: #dfe2e9; }
+.unlock { display: inline-block; margin-top: 6px; background: #fff4d6; color: #8a5a00; border-radius: 8px; padding: 4px 10px; font-size: 13px; font-weight: 800; }
+.res-msg p { margin: 2px 0 0; color: var(--ink2); font-size: 13.5px; }
+.badge-best { display: inline-block; background: #fff4d6; color: #8a5a00; border-radius: 999px; font-size: 12px; font-weight: 800; padding: 2px 10px; margin-left: 6px; vertical-align: 2px; }
+.stats { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.stat { background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 6px 12px; min-width: 92px; }
+.stat .k { font-size: 11px; color: var(--muted); font-weight: 700; }
+.stat .v { font-family: var(--num); font-size: 22px; font-weight: 600; line-height: 1.15; }
+.stat .v small { font-size: 13px; color: var(--muted); font-family: var(--jp); margin-left: 2px; }
+.stat .v.txt { font-size: 14px; font-family: var(--jp); font-weight: 700; line-height: 1.5; }
+.res-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.res-actions .btn-main, .res-actions .btn-sub { flex: 1 1 180px; }
+.res-actions .btn-ghost { flex: 0 1 auto; }
+.res-actions button { min-height: 52px; border-radius: 12px; font-weight: 800; padding: 8px 14px; font-size: 15px; line-height: 1.25; }
+.res-actions button small { display: block; font-size: 11.5px; font-weight: 600; opacity: .8; }
+.btn-main { background: var(--red); color: #fff; border: 0; box-shadow: 0 3px 0 #8e2a20; }
+.btn-main:active { transform: translateY(2px); box-shadow: 0 1px 0 #8e2a20; }
+.btn-sub { background: var(--ink); color: #fff; border: 0; }
+.btn-ghost { background: #fff; border: 1px solid var(--line); color: var(--ink2); }
+.res-list-head { margin: 16px 0 6px; font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .06em; }
+.res-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+.ri { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; text-align: left; min-height: 42px; }
+.ri .mk { width: 22px; height: 22px; border-radius: 50%; color: #fff; font-size: 13px; font-weight: 800; display: grid; place-items: center; flex: none; }
+.ri.ok .mk { background: var(--green); } .ri.ng .mk { background: var(--red); }
+.ri .s { font-size: 12px; font-weight: 800; }
+.ri .s.s6 { color: var(--s6); } .ri .s.s5 { color: var(--s5); } .ri .s.s4 { color: var(--s4); }
+.ri .s.s3 { color: var(--s3); } .ri .s.s2 { color: var(--s2); } .ri .s.s1 { color: var(--s1); }
+.ri .nm { font-family: var(--num); font-size: 18px; font-weight: 600; }
+.ri .tm { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.ri.sel { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink) inset; }
+
+/* ---------- 指板 ---------- */
+.board-card { margin-top: 12px; padding: 10px 12px 12px; scroll-margin-top: 76px; }
+.board-head { display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 0 2px 6px; flex-wrap: wrap; }
+.board-title { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .06em; }
+.legend { display: flex; gap: 10px; font-size: 12px; color: var(--ink2); flex-wrap: wrap; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+.view-seg { margin-left: auto; }
+.board-toggle { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 4px 12px; font-size: 12.5px; font-weight: 700; color: var(--ink2); min-height: 32px; white-space: nowrap; }
+body[data-phase="setup"] .board-card.closed #boardWrap,
+body[data-phase="setup"] .board-card.closed .board-cap,
+body[data-phase="setup"] .board-card.closed .view-seg,
+body[data-phase="setup"] .board-card.closed .legend { display: none; }
+body[data-phase="setup"] .board-card.closed .board-head { padding-bottom: 0; }
+body[data-phase="setup"] .board-card.closed .board-toggle { margin-left: auto; }
+body:not([data-phase="setup"]) .board-toggle { display: none; }
+.view-seg button { white-space: nowrap; }
+#boardWrap { position: relative; }
+#board { display: block; width: 100%; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.board-cap { font-size: 12.5px; color: var(--muted); margin: 8px 2px 0; min-height: 1.4em; }
+.board-cap b { color: var(--ink); }
+.chord-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.chord-btn { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 5px 14px; font-family: var(--num); font-size: 16px; font-weight: 600; min-height: 36px; }
+.chord-btn[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.chord-row .note { font-size: 12px; color: var(--muted); }
+
+.hitbox { fill: transparent; cursor: pointer; }
+.hitbox:hover { fill: rgba(255,255,255,.08); }
+.mk .pop { transform-box: fill-box; transform-origin: center; }
+.mk-hit .pop, .mk-miss .pop, .mk-flash .pop { animation: pop .22s ease-out; }
+.mk-answer .pop { animation: pop .25s ease-out .1s both; }
+.mk-shape .pop { animation: pop .2s ease-out both; }
+.mk-flash { animation: fade 1.3s ease-in .2s forwards; pointer-events: none; }
+.ring { transform-box: fill-box; transform-origin: center; animation: ring 1.3s ease-out infinite; }
+@keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes fade { to { opacity: 0; } }
+@keyframes ring { from { transform: scale(1); opacity: .9; } to { transform: scale(1.7); opacity: 0; } }
+.mk text { font-family: var(--num); font-weight: 600; pointer-events: none; }
+.mk { pointer-events: none; }
+.fretnum { font-family: var(--num); font-size: 12px; fill: #9aa0b1; }
+.fretnum.mark { fill: var(--ink2); font-weight: 600; font-size: 13px; }
+
+/* ---------- TSG Guitar Tools ---------- */
+.tools { max-width: 980px; margin: 18px auto 0; padding: 0 16px; }
+.tools-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.tools-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, #d0d3da); }
+.tools-line.right { background: linear-gradient(to left, transparent, #d0d3da); }
+.tools-title { font-family: "Oswald", sans-serif; font-size: .7rem; font-weight: 600; color: #aaa; letter-spacing: .18em; text-transform: uppercase; white-space: nowrap; }
+.banner-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; max-width: 948px; margin: 0 auto; }
+.img-banner-link {
+  display: block; border-radius: 8px; overflow: hidden;
+  transition: transform .15s, box-shadow .15s; box-shadow: 0 4px 14px rgba(0,0,0,.18);
+}
+.img-banner-link:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(0,0,0,.24); }
+.img-banner-link:active { transform: scale(.98); }
+.img-banner { display: block; width: 100%; height: auto; aspect-ratio: 3 / 1; }
+.copy { text-align: center; padding: 18px 16px 24px; font-size: .68rem; line-height: 1.6; color: #9aa0ac; }
+
+/* ---------- 使い方ガイド ---------- */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 1000;
+  align-items: flex-start; justify-content: center; overflow-y: auto; padding: 20px 16px 40px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box { background: #fff; border-radius: 14px; width: 100%; max-width: 520px; padding: 26px 22px 22px; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,.22); margin: auto; }
+.modal-close { position: absolute; top: 10px; right: 10px; background: none; border: 0; font-size: 1.6rem; color: #aaa; line-height: 1; width: 40px; height: 40px; }
+.modal-close:hover { color: #333; }
+.modal-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 2px solid var(--bg); }
+.modal-lead { font-size: .84rem; color: #555; margin: 0 0 16px; line-height: 1.7; }
+.modal-section { margin-bottom: 18px; }
+.modal-section-title { font-size: .78rem; font-weight: 700; color: #fff; background: var(--ink); border-radius: 5px; padding: 4px 10px; margin-bottom: 8px; display: inline-block; letter-spacing: .08em; }
+.tip-item { padding: 8px 0; border-bottom: 1px solid var(--bg); }
+.tip-item:last-child { border-bottom: none; }
+.tip-title { font-size: .88rem; font-weight: 700; color: var(--blue); margin-bottom: 3px; }
+.tip-title.red { color: var(--red); }
+.tip-desc { font-size: .82rem; color: #555; line-height: 1.7; }
+.tip-desc b { color: var(--ink); }
+.mini-btn { margin-top: 6px; border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 6px 12px; font-size: 12.5px; font-weight: 700; color: var(--ink2); }
+
+/* ================= デザイン調整（2026-10-08）：フォントと「ゲーム画面」らしい締まり ================= */
+:root {
+  --label: "Barlow Semi Condensed", "Oswald", var(--jp);
+  --hud: #161627;
+  --hud2: #24243f;
+  --hud-line: rgba(255,255,255,.12);
+  --hud-text: #e9eaf5;
+  --hud-sub: #a7aac4;
+  --ok-bright: #3ddc84;
+  --ng-bright: #ff6b5e;
+}
+body {
+  background: radial-gradient(1200px 500px at 50% -120px, #dfe3ee 0%, rgba(223,227,238,0) 70%), var(--bg);
+  font-feature-settings: "palt" 1;
+  letter-spacing: .01em;
+}
+.card { border: 1px solid rgba(26,26,46,.05); }
+/* 小見出しは英字コンデンス体で引き締める */
+.opt-label, .st-map-title, .board-title, .answer .lbl, .res-list-head, .st-group-lbl {
+  font-family: var(--label); font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+}
+.st-map-title::before { content: "▸ "; color: var(--red); }
+.tab { font-weight: 900; letter-spacing: .06em; }
+.start { font-weight: 900; letter-spacing: .14em; }
+.start small, .res-actions button small { letter-spacing: .04em; }
+
+/* ---------- 選んだステージ：濃紺の帯 ---------- */
+.st-detail {
+  background: linear-gradient(135deg, var(--hud) 0%, var(--hud2) 100%);
+  border: 0; border-left: 4px solid var(--red); color: var(--hud-text);
+  box-shadow: 0 6px 18px rgba(22,22,39,.25);
+}
+.st-num { color: var(--ng-bright); }
+.st-d-title { color: #fff; }
+.st-d-intro { color: var(--hud-sub); }
+.st-d-rule { color: #8d90ab; }
+.st-d-stars .off { color: #3b3d5e; }
+.st-node.sel { background: linear-gradient(160deg, #2a2a48, var(--hud)); }
+.st-node:not(.sel):hover { border-color: #c4c8d4; transform: translateY(-1px); }
+.st-node { transition: transform .12s, border-color .12s; }
+
+/* ---------- 出題カード：ゲーム画面（HUD） ---------- */
+.quiz {
+  background: linear-gradient(160deg, var(--hud) 0%, var(--hud2) 100%);
+  color: var(--hud-text); border: 0;
+  box-shadow: 0 8px 24px rgba(22,22,39,.28);
+}
+.quiz .q-of, .quiz .q-ask { color: var(--hud-sub); font-weight: 700; }
+.quiz .q-note .nm { color: #fff; text-shadow: 0 2px 12px rgba(255,255,255,.12); }
+.quiz .q-note .kn { color: var(--hud-sub); }
+.quiz .q-count { color: var(--hud-sub); }
+.quiz .q-count .big { color: #fff; }
+.quiz .sbadge { box-shadow: 0 2px 10px rgba(0,0,0,.35); }
+.quiz .dots i { background: #3a3c5c; }
+.quiz .dots i.cur { background: var(--hud); box-shadow: 0 0 0 2px #fff; }
+.quiz .dots i.ok { background: var(--ok-bright); }
+.quiz .dots i.ng { background: var(--ng-bright); }
+.quiz .feedback { border-top-color: var(--hud-line); }
+.quiz .fb-text { color: var(--hud-text); }
+.quiz .fb-text b.ok { color: var(--ok-bright); }
+.quiz .fb-text b.ng { color: var(--ng-bright); }
+.quiz .fb-text .sub { color: var(--hud-sub); }
+.quiz .fb-text .sub b, .quiz .fb-text b:not(.ok):not(.ng) { color: #fff; }
+.quiz .fb-text .hint { color: var(--hud-sub); }
+.quiz .next { background: #fff; color: var(--hud); }
+.quiz .beats .state { color: var(--hud-sub); }
+.quiz .cell { background: rgba(255,255,255,.05); border-color: var(--hud-line); color: #5d6080; }
+.quiz .cell.now { background: rgba(255,255,255,.14); border-color: #fff; color: #fff; }
+.quiz .beats[data-state="ask"] .cell.past { background: rgba(33,118,174,.28); color: #9fd0f5; border-color: rgba(33,118,174,.5); }
+.quiz .beats[data-state="count"] .cell.now { background: #fff; color: var(--hud); }
+.quiz .timebar { background: rgba(255,255,255,.1); }
+.quiz .mic-live { color: var(--hud-text); }
+.quiz .mic-live .lv { background: rgba(255,255,255,.12); }
+.quiz .mic-live .hz { color: #fff; }
+
+/* ---------- 結果：点数を濃紺の帯に ---------- */
+.res-top {
+  background: linear-gradient(135deg, var(--hud) 0%, var(--hud2) 100%);
+  color: var(--hud-text); border-radius: 14px; padding: 14px 18px;
+  box-shadow: 0 6px 18px rgba(22,22,39,.22);
+}
+.res-top .score .n { color: #fff; }
+.res-top .score .d { color: var(--hud-sub); }
+.res-top .res-msg h2 { color: #fff; }
+.res-top .res-msg p { color: var(--hud-sub); }
+.res-top .res-stars .off { color: #3b3d5e; }
+.stat .k { font-family: var(--label); letter-spacing: .08em; }
+
+/* ---------- 使い方ガイド ---------- */
+.modal-title { font-weight: 900; }
+.modal-section-title { font-family: var(--label), var(--jp); letter-spacing: .1em; }
+
+
+/* ---------- フェーズ別表示 ---------- */
+body:not([data-phase="setup"]) .setup,
+body:not([data-phase="quiz"]) .quiz,
+body:not([data-phase="result"]) .result,
+body:not([data-phase="quiz"]) .q-only { display: none !important; }
+body[data-phase="quiz"] .not-quiz { display: none !important; }
+body:not([data-phase="setup"]) .view-seg { display: none; }
+body[data-phase="quiz"] .board-head { display: none; }
+body[data-phase="quiz"] .board-cap:empty { display: none; }
+body[data-phase="quiz"] .tools, body[data-phase="quiz"] .copy { display: none; }
+
+@media (max-width: 639px) {
+  main { padding: 10px 12px 6px; }
+  .home-top { gap: 8px; }
+  .tabs { flex: 1 1 100%; }
+  .answer { margin-left: 0; flex: 1 1 100%; }
+  .answer .seg { flex: 1; }
+  .answer .seg button { flex: 1; }
+  .st-map { gap: 8px 10px; }
+  .st-nodes { gap: 4px; }
+  .st-node { width: 40px; height: 46px; }
+  .st-detail { flex-direction: column; align-items: stretch; gap: 10px; }
+  .st-detail .start { width: 100%; }
+  .free-row { grid-template-columns: 1fr 1fr; }
+  .free-row > :nth-child(2) { grid-column: 1 / -1; grid-row: 1; }
+  .chip { width: 42px; height: 42px; }
+  .banner-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .top-in { padding: 6px 12px; min-height: 56px; gap: 8px; }
+  .brand { gap: 7px; }
+  .brand-main { font-size: 1.75rem; gap: 5px; }
+  .brand-main svg { width: 18px; height: 41px; }
+  .brand-sub2 { font-size: .92rem; }
+  .brand-sub1 { font-size: .62rem; letter-spacing: .18em; }
+  .help-btn .long { display: none; }
+  .opts { grid-template-columns: 1fr; gap: 10px; }
+  .setup { padding: 14px 12px; }
+  .quiz { padding: 8px 12px 8px; }
+  .q-row { min-height: 66px; gap: 8px; }
+  .q-note .nm { font-size: 48px; }
+  .sbadge { font-size: 21px; padding: 3px 9px; }
+  .q-of, .q-ask { font-size: 15px; }
+  .dots { max-width: 34%; gap: 4px; }
+  .dots i { width: 8px; height: 8px; }
+  .feedback { min-height: 62px; margin-top: 4px; padding-top: 6px; }
+  .fb-text { font-size: 13.5px; }
+  .beats { margin-top: 6px; }
+  .beats .state { width: 58px; font-size: 12px; }
+  .cell { height: 30px; }
+  .board-card { margin-top: 10px; padding: 8px 8px 10px; }
+  .board-head { gap: 6px; }
+  .result { padding: 14px 12px; }
+  .score .n { font-size: 54px; }
+  .res-actions .btn-main, .res-actions .btn-sub { flex: 1 1 40%; }
+  .res-actions .btn-ghost { flex: 1 1 40%; min-height: 42px; }
+  .res-list { grid-template-columns: 1fr 1fr; }
+  .tools { padding: 0 12px; }
+}
+@media (max-width: 480px) {
+  .brand-note { display: none; }
+}
+@media (max-width: 380px) {
+  .brand-main { font-size: 1.55rem; }
+  .q-note .nm { font-size: 42px; }
+  .q-ask { display: none; }
+  .dots i { width: 7px; height: 7px; }
+  .dots { gap: 3px; }
+  .counter { font-size: 17px; }
+}
+/* スマホ横向きなど背の低い画面：出題カードを横並びにして指板の場所を確保 */
+@media (max-height: 520px) and (orientation: landscape) {
+  .top-in { min-height: 44px; padding-top: 3px; padding-bottom: 3px; }
+  .brand-main { font-size: 1.5rem; }
+  .brand-main svg { width: 14px; height: 32px; }
+  main { padding-top: 8px; }
+  .quiz { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 16px; align-items: center; padding: 6px 14px; }
+  .q-row { min-height: 52px; }
+  .q-note .nm { font-size: 40px; }
+  .beats { margin-top: 0; }
+  .feedback { grid-column: 1 / -1; min-height: 42px; margin-top: 2px; padding-top: 4px; }
+  .board-card { margin-top: 8px; padding: 6px 10px 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring, .mk .pop, .q-main.pop { animation: none !important; }
+}
+</style>
+</head>
+<body data-phase="setup">
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="./" aria-label="TSG フレットトレーナー トップ">
+      <span class="brand-main">
+        <svg viewBox="0 0 48 108" width="22" height="50" aria-hidden="true">
+          <rect x="17" y="1" width="14" height="13" rx="3" fill="rgba(255,255,255,0.92)"/>
+          <rect x="10" y="3" width="8" height="3.5" rx="1.75" fill="rgba(255,255,255,0.75)"/>
+          <rect x="10" y="8" width="8" height="3.5" rx="1.75" fill="rgba(255,255,255,0.75)"/>
+          <rect x="30" y="3" width="8" height="3.5" rx="1.75" fill="rgba(255,255,255,0.75)"/>
+          <rect x="30" y="8" width="8" height="3.5" rx="1.75" fill="rgba(255,255,255,0.75)"/>
+          <rect x="17" y="13" width="14" height="2.5" rx="1" fill="rgba(255,255,255,0.6)"/>
+          <rect x="19.5" y="15.5" width="9" height="42" rx="2" fill="rgba(255,255,255,0.92)"/>
+          <rect x="19.5" y="24" width="9" height="1" fill="rgba(26,26,46,0.25)"/>
+          <rect x="19.5" y="33" width="9" height="1" fill="rgba(26,26,46,0.25)"/>
+          <rect x="19.5" y="42" width="9" height="1" fill="rgba(26,26,46,0.25)"/>
+          <rect x="17" y="55" width="14" height="5" rx="2" fill="rgba(255,255,255,0.92)"/>
+          <ellipse cx="24" cy="69" rx="13" ry="11" fill="rgba(255,255,255,0.92)"/>
+          <rect x="17" y="75" width="14" height="8" fill="rgba(255,255,255,0.92)"/>
+          <ellipse cx="24" cy="90" rx="17" ry="16" fill="rgba(255,255,255,0.92)"/>
+          <circle cx="24" cy="87" r="6.5" fill="rgba(26,26,46,0.75)"/>
+          <rect x="18" y="97" width="12" height="3" rx="1.5" fill="rgba(26,26,46,0.45)"/>
+        </svg>TSG
+      </span>
+      <span class="brand-right">
+        <span class="brand-sub1-row"><span class="brand-note">【プロギタリスト監修】</span><span class="brand-sub1">Guitar School</span></span>
+        <span class="brand-sub2">Fret Trainer</span>
+      </span>
+    </a>
+    <div class="top-right">
+      <span class="counter q-only" id="counter">1<small> / 10</small></span>
+      <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" aria-label="音のオン・オフ" title="音のオン・オフ"></button>
+      <button class="help-btn not-quiz" id="helpBtn" type="button"><span class="help-icon">?</span><span>使い方<span class="long">ガイド</span></span></button>
+      <button class="quit q-only" id="quitBtn" type="button">やめる</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 練習を選ぶ -->
+  <section class="card setup" aria-label="練習を選ぶ">
+    <div class="home-top">
+      <div class="tabs" role="tablist">
+        <button type="button" class="tab" role="tab" data-tab="stage" id="tabStage">🏆 ステージ</button>
+        <button type="button" class="tab" role="tab" data-tab="free" id="tabFree">🎯 フリー練習</button>
+      </div>
+      <div class="answer">
+        <span class="lbl">答え方</span>
+        <div class="seg" data-key="input" role="group" aria-label="答え方">
+          <button type="button" data-v="tap">👆 タップ</button>
+          <button type="button" data-v="mic">🎸 ギターで弾く</button>
+        </div>
+      </div>
+    </div>
+    <p class="mic-note" id="micNote" hidden>🎸 自分のギターで弾いて答えます。<b>高さ（オクターブ）まで判定</b>し、同じ高さなら弦は問いません。静かな場所で、<b>イヤホン推奨</b>。</p>
+
+    <!-- ステージ -->
+    <div class="pane" id="stagePane" role="tabpanel">
+      <div class="st-map-head"><span class="st-map-title">ステージマップ</span><span class="st-total" id="stTotal"></span></div>
+      <div class="st-map" id="stMap"></div>
+      <div class="st-detail" id="stDetail"></div>
+      <p class="st-hint">6弦だけ・5弦だけで練習したいときは <button type="button" id="toFree">フリー練習</button> へ。</p>
+    </div>
+
+    <!-- フリー練習 -->
+    <div class="pane free-pane" id="freePane" role="tabpanel">
+      <div class="free-strings">
+        <span class="opt-label" style="margin:0">弦</span>
+        <div class="chips" id="strChips">
+          <button type="button" class="chip s6" data-s="6">6<small>弦</small></button>
+          <button type="button" class="chip s5" data-s="5">5<small>弦</small></button>
+          <button type="button" class="chip s4" data-s="4">4<small>弦</small></button>
+          <button type="button" class="chip s3" data-s="3">3<small>弦</small></button>
+          <button type="button" class="chip s2" data-s="2">2<small>弦</small></button>
+          <button type="button" class="chip s1" data-s="1">1<small>弦</small></button>
+        </div>
+        <span class="presets">
+          <button type="button" class="preset" data-p="6">6弦だけ</button>
+          <button type="button" class="preset" data-p="5">5弦だけ</button>
+          <button type="button" class="preset" data-p="6,5">6・5弦</button>
+          <button type="button" class="preset" data-p="6,5,4,3,2,1">全弦</button>
+        </span>
+      </div>
+      <div class="free-row">
+        <div>
+          <div class="opt-label">音</div>
+          <div class="seg compact" data-key="notes" role="group" aria-label="音">
+            <button type="button" data-v="7">7音</button>
+            <button type="button" data-v="12">12音<small>♯♭</small></button>
+          </div>
+        </div>
+        <div>
+          <div class="opt-label">練習</div>
+          <div class="seg compact" data-key="mode" role="group" aria-label="練習の種類">
+            <button type="button" data-v="free">じっくり</button>
+            <button type="button" data-v="beat">4拍チャレンジ</button>
+          </div>
+        </div>
+        <div>
+          <div class="opt-label">問題数</div>
+          <div class="seg compact" data-key="count" role="group" aria-label="問題数">
+            <button type="button" data-v="10">10問</button>
+            <button type="button" data-v="20">20問</button>
+          </div>
+        </div>
+      </div>
+      <div class="tempo" id="tempoBox">
+        <div class="tempo-row">
+          <button type="button" class="step" id="bpmDown" aria-label="テンポを下げる">−</button>
+          <div class="bpm"><span id="bpmVal">72</span><small>BPM</small></div>
+          <input type="range" id="bpmRange" min="40" max="160" step="2" aria-label="テンポ">
+          <button type="button" class="step" id="bpmUp" aria-label="テンポを上げる">＋</button>
+        </div>
+        <div class="tempo-note" id="tempoNote"></div>
+      </div>
+      <div class="start-row">
+        <button class="start" id="startBtn" type="button">スタート<small id="startSub"></small></button>
+        <div class="best" id="bestBox"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 出題 -->
+  <section class="card quiz" aria-live="polite">
+    <div class="q-row">
+      <div class="q-main" id="qMain"></div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+    </div>
+    <div class="beats" id="beats" data-state="idle">
+      <div class="state" id="beatState"></div>
+      <div class="cells" id="cells">
+        <div class="cell">1</div><div class="cell">2</div><div class="cell">3</div><div class="cell">4</div>
+        <div class="timebar"><i id="timebar"></i></div>
+      </div>
+    </div>
+    <div class="feedback">
+      <div class="fb-text" id="fbText"></div>
+      <button class="next" id="nextBtn" type="button" hidden>次へ ▶</button>
+    </div>
+  </section>
+
+  <!-- 結果 -->
+  <section class="card result" id="result" aria-live="polite"></section>
+
+  <!-- 指板 -->
+  <section class="card board-card" aria-label="指板">
+    <div class="board-head">
+      <span class="board-title" id="boardTitle">指板</span>
+      <span class="legend" id="legend"></span>
+      <div class="seg seg-sm view-seg" data-key="view" role="group" aria-label="指板の表示">
+        <button type="button" data-v="names">音名</button>
+        <button type="button" data-v="weak">苦手マップ</button>
+        <button type="button" data-v="none">なし</button>
+      </div>
+      <button type="button" class="board-toggle" id="boardToggle" aria-expanded="true">閉じる ▲</button>
+    </div>
+    <div id="boardWrap"><svg id="board" role="group" aria-label="ギター指板 0〜12フレット"></svg></div>
+    <div class="board-cap" id="boardCap"></div>
+  </section>
+</main>
+
+<!-- 他のTSGアプリ（メトロノームが先頭・ウクレレが末尾） -->
+<section class="tools" aria-label="TSG Guitar Tools">
+  <div class="tools-head"><div class="tools-line"></div><div class="tools-title">TSG Guitar Tools</div><div class="tools-line right"></div></div>
+  <div class="banner-row">
+    <a class="img-banner-link" href="https://metrotuner.tsg-gt.com"><img class="img-banner" src="images/banner-metrotuner.jpg" alt="メトロノーム＆チューナー" loading="lazy" width="1086" height="362"></a>
+    <a class="img-banner-link" href="https://chord.tsg-gt.com"><img class="img-banner" src="images/banner-chord.jpg" alt="コードダイアグラム - コードをすぐ表示" loading="lazy" width="1086" height="362"></a>
+    <a class="img-banner-link" href="https://scale.tsg-gt.com"><img class="img-banner" src="images/banner-scale.jpg" alt="スケールビューアー - スケールを見える化" loading="lazy" width="1086" height="362"></a>
+    <a class="img-banner-link" href="https://rhythm.tsg-gt.com"><img class="img-banner" src="images/banner-rhythm.jpg" alt="リズムトレーナー" loading="lazy" width="1086" height="362"></a>
+    <a class="img-banner-link" href="https://uk-chord.tsg-gt.com"><img class="img-banner" src="images/banner-uk-chord.jpg" alt="ウクレレコード表" loading="lazy" width="1086" height="362"></a>
+  </div>
+</section>
+
+<footer class="copy">
+  © 2026 ギタースクールTSG（杉山つよし）&nbsp;All Rights Reserved.<br>
+  無断複製・転載を禁じます。
+</footer>
+
+<!-- 使い方ガイド（TSGアプリ共通の「これ、知ってましたか？」形式） -->
+<div class="modal-overlay" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal-box">
+    <button class="modal-close" type="button" id="helpClose" aria-label="閉じる">×</button>
+    <div class="modal-title" id="helpTitle">💡 これ、知ってましたか？</div>
+    <p class="modal-lead">フレットトレーナーの遊び方と、知っていると指板がグッと覚えやすくなるコツを紹介します。</p>
+
+    <div class="modal-section">
+      <div class="modal-section-title">🏆 STAGE — ステージで指板制覇</div>
+      <div class="tip-item">
+        <div class="tip-title red">⭐ 10問中8問正解でクリア、全問正解で★3</div>
+        <div class="tip-desc">「6弦の C はどこ？」のように出題されます。指板の6弦の上をタップして答えましょう。採点は<b>1問1回</b>。まちがえても正しい位置が光り、音も鳴ります。<b>どのステージからでも挑戦できます</b>（順番に進むのがおすすめ）。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">🗺 6・5弦 → 4弦 → 3弦 → 2弦 → 1弦 と広がります</div>
+        <div class="tip-desc">第1章はセーハコードのルートになる6・5弦（ステージ1は0〜5フレットだけ）。そこから1本ずつ弦が増え、最後は<b>全弦・12音・20問のファイナル</b>です。各章の後半は「4拍チャレンジ」になります。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">🎯 6弦だけ・5弦だけは「フリー練習」で</div>
+        <div class="tip-desc">はじめての人は、フリー練習で<b>6弦だけ → 5弦だけ</b>から始めるのがおすすめ。1〜6弦を好きに組み合わせ、音・練習の種類・問題数も選べます。</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">🎸 ギターで弾いて答えられます</div>
+      <div class="tip-item">
+        <div class="tip-title red">「答え方」で「ギターで弾く」を選ぶとマイクで判定</div>
+        <div class="tip-desc">出された音を自分のギターで弾くと、TSGチューナーと同じ仕組みで音を聞き取り、<b>音の高さ（オクターブ）まで</b>判定します。弦の区別はできないため、<b>同じ高さなら別の弦で弾いても正解</b>です。チューニングの多少のずれは気にしなくて大丈夫。マイクが倍音を拾っても、正しく弾いていれば正解になるよう補正しています。ギターでクリアしたステージには🎸マークがつきます。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">うまく聞き取れないときは</div>
+        <div class="tip-desc">チューニングを合わせる（<a href="https://metrotuner.tsg-gt.com">TSGチューナー</a>）、静かな場所で弾く、前の音をミュートしてから弾く、のがコツ。4拍チャレンジのクリック音を拾わないよう<b>イヤホン推奨</b>です。うまくいかないときは指板のタップでも答えられます。</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">⏱ 4拍チャレンジ</div>
+      <div class="tip-item">
+        <div class="tip-title">問題はいつも小節の1拍目に出ます</div>
+        <div class="tip-desc">カウントのあと、クリックに合わせて出題。<b>4拍以内</b>に答えます。答えた拍のマスに◯✕がつき、「◯2拍目」のように記録されます。</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">🧠 覚えるコツ</div>
+      <div class="tip-item">
+        <div class="tip-title red">目印のフレットを基準にする</div>
+        <div class="tip-desc">● の目印（3・5・7・9・12）から数えると速くなります。6弦は <b>3=G・5=A・7=B・8=C</b>、5弦は <b>3=C・5=D・7=E</b>。12フレットは開放弦と同じ音名（1オクターブ上）です。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">半音は「E-F」と「B-C」だけ</div>
+        <div class="tip-desc">となりの音名は2フレット離れています。例外は <b>EとF・BとC</b> の間で、ここだけ1フレット。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">弦どうしの関係を使う</div>
+        <div class="tip-desc">5弦は6弦の<b>5フレット手前</b>と同じ音名。4弦は6弦の、3弦は5弦の<b>2フレット先</b>（1オクターブ上）。2弦は4弦の<b>3フレット先</b>。1弦は<b>6弦とまったく同じ</b>並びです。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">正解すると「そこから弾けるコード」が出ます</div>
+        <div class="tip-desc">6・5弦の問題では、その位置をルートにしたセーハコード（例：G・Gm）を表示。結果画面で問題をタップすると、コードの形が指板に出て鳴らせます。</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">📊 苦手マップと記録</div>
+      <div class="tip-item">
+        <div class="tip-title">苦手な音ほど多めに出題されます</div>
+        <div class="tip-desc">指板の表示で「苦手マップ」を選ぶと、音ごとに <b style="color:var(--green)">得意</b>・<b style="color:var(--amber)">もう少し</b>・<b style="color:var(--red)">苦手</b> を色で確認できます。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">記録は自動保存されます</div>
+        <div class="tip-desc">ステージの★・苦手マップ・ベスト記録はこの端末のブラウザに保存されます。<b>※ブラウザの閲覧データ（サイトデータ）を削除すると記録も消えます。</b><br>
+          <button class="mini-btn" type="button" id="resetStats">記録をリセット</button></div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">📱 ホーム画面に追加（オフライン対応）</div>
+      <div class="tip-item">
+        <div class="tip-title">アプリのように使えます</div>
+        <div class="tip-desc">iPhoneはSafariの共有ボタン →「ホーム画面に追加」、Androidはメニュー →「ホーム画面に追加」。電波がなくても練習できます。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">音が出ないときは</div>
+        <div class="tip-desc">右上の🔈ボタンがオンか、端末の音量、iPhoneの<b>消音スイッチ（マナーモード）</b>を確認してください。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
