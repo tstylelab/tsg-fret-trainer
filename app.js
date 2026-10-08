@@ -249,7 +249,13 @@
     const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     let ctx = null, input = null, an = null, anLow = null, buf = null, bufLow = null;
     let stream = null, src = null, boost = null, active = false, raf = 0;
-    let prevLow = null, noise = null, noiseLow = null, attackAt = -1, armedAt = Infinity, cand = null;
+    let prevLow = null, noise = null, noiseLow = null, attackAt = -1, attackPeak = 0, attackPeakAll = 0, armedAt = Infinity, cand = null;
+    // 判定の条件（2026-10-08 フレットノイズ対策）
+    const HOLD_OK = 0.12; // 正解：同じ高さがこの秒数、安定して続いたら判定
+    const HOLD_NG = 0.25; // 不正解：さらに長く・はっきり続いたときだけ（ノイズで「不正解」にしない）
+    const SKIP = 0.04;    // 弾いた直後の雑音（ピックや指が当たる音）は見ない
+    const CONF = 0.9;     // 音程のはっきりさ（0〜1）
+    const FADE = 0.3;     // 弾いた直後の大きさの3割より小さくなったら「すぐ消えた音」として捨てる
     let onDetect = null, onLive = null, expect = [];
 
     function build() {
@@ -317,26 +323,38 @@
       // 環境ノイズ：静かになると即下がり、鳴っている間はゆっくりしか上がらない
       noise = noise === null || rms < noise ? rms : Math.min(noise * 1.005, rms);
       noiseLow = noiseLow === null || low < noiseLow ? low : Math.min(noiseLow * 1.005, low);
-      if (prevLow !== null && low > prevLow * 1.8 && low > Math.max(0.004, noiseLow * 4)) { attackAt = now; cand = null; }
+      // 弾いた瞬間（アタック）：低い帯域の音量が急に、しかも環境ノイズよりはっきり大きく跳ね上がったとき
+      if (prevLow !== null && low > prevLow * 1.8 && low > Math.max(0.006, noiseLow * 6)) { attackAt = now; attackPeak = low; attackPeakAll = rms; cand = null; }
+      else if (attackAt >= 0) { if (low > attackPeak) attackPeak = low; if (rms > attackPeakAll) attackPeakAll = rms; }
       prevLow = low;
-      const floor = Math.max(0.004, Math.min(0.04, noise * 3));
+      const floor = Math.max(0.006, Math.min(0.05, noise * 5));
       const res = C.detectPitch(buf, ctx.sampleRate, 70, 1400, rms, floor);
-      let freq = res && res.confidence >= 0.85 ? res.freq : null;
-      // 判定待ちの間だけ、倍音を音程と取り違えていないか確かめて基音を決め直す（計算が重いので常時はしない）
+      let freq = res && res.confidence >= CONF ? res.freq : null;
       const judging = onDetect && attackAt >= armedAt - 0.05;
-      if (freq && judging) freq = C.decideFundamental(buf, ctx.sampleRate, freq);
+      // すぐ消える音（こすれ・キュッ・打撃）は判定に使わない
+      // （低い帯域と全体の両方で小さくなったときだけ。高い音は低い帯域では小さく見えるため）
+      const fading = attackAt >= 0 && low < attackPeak * FADE && rms < attackPeakAll * FADE;
+      // 判定待ちの間だけ、倍音を音程と取り違えていないか確かめて基音を決め直す（計算が重いので常時はしない）
+      if (freq && judging && !fading) freq = C.decideFundamental(buf, ctx.sampleRate, freq);
       const mf = freq ? C.freqToMidi(freq) : null;
       if (onLive) onLive(Math.min(1, rms * 8), mf == null ? null : Math.round(mf));
-      if (judging && mf !== null && now - attackAt >= 0.03) {
-        if (cand && Math.abs(cand.mf - mf) < 0.5) cand.n++; else cand = { mf, n: 1 };
-        if (cand.n >= 3) {
-          // 出題の音と照合：半音の0.75以内（チューニングのずれは甘く）／倍音だけ拾った場合も正解。オクターブ違いは不正解
-          const hit = expect.some((fe) => C.heardMatches(buf, ctx.sampleRate, freq, fe));
-          const fn = onDetect, at = attackAt;
-          disarm();
-          fn({ midi: Math.round(mf), correct: hit }, at);
-        }
+      if (!judging) return;
+      if (fading) { cand = null; return; }
+      if (mf === null || now - attackAt < SKIP) {
+        // 一瞬だけ音程が取れない程度なら続ける。0.06秒以上途切れたら最初から
+        if (cand && now - cand.last > 0.06) cand = null;
+        return;
       }
+      if (cand && Math.abs(cand.mf - mf) < 0.35) { cand.n++; cand.last = now; cand.mf = (cand.mf * 3 + mf) / 4; }
+      else cand = { mf, start: now, last: now, n: 1 };
+      const held = now - cand.start;
+      if (held < HOLD_OK || cand.n < 5) return;
+      // 出題の音と照合：半音の0.75以内（チューニングのずれは甘く）／倍音だけ拾った場合も正解。オクターブ違いは不正解
+      const hit = expect.some((fe) => C.heardMatches(buf, ctx.sampleRate, freq, fe));
+      if (!hit && (held < HOLD_NG || cand.n < 10)) return;
+      const fn = onDetect, at = attackAt;
+      disarm();
+      fn({ midi: Math.round(mf), correct: hit }, at);
     }
 
     // 動作確認用：合成したギター音をマイクの代わりに入れる（?mictest=1 のときだけ使う）
@@ -346,7 +364,26 @@
       if (s) { s.connect(input); s.start(); }
     }
 
-    return { start, stop, arm, disarm, live, testPlay, TEST, get active() { return active; } };
+    // 動作確認用：フレットノイズ風の音（キュッ・カチッ・こすれ・スライド）を入れる
+    function testNoise(kind) {
+      build();
+      const sr = ctx.sampleRate;
+      const dur = { squeak: 0.07, tap: 0.06, rub: 0.04, slide: 0.12 }[kind] || 0.06;
+      const len = Math.floor(sr * dur);
+      const b = ctx.createBuffer(1, len, sr);
+      const d = b.getChannelData(0);
+      let ph = 0, lp = 0;
+      for (let i = 0; i < len; i++) {
+        const t = i / len, env = Math.sin(Math.PI * Math.min(1, t * 1.2)) * (1 - t);
+        if (kind === 'squeak') { ph += 2 * Math.PI * (900 + 500 * t) / sr; d[i] = 0.35 * env * Math.sin(ph); }
+        else if (kind === 'slide') { ph += 2 * Math.PI * (300 + 220 * t) / sr; d[i] = 0.25 * env * Math.sin(ph); }
+        else if (kind === 'rub') { lp += 0.3 * ((Math.random() * 2 - 1) - lp); d[i] = 0.6 * env * lp; }
+        else { d[i] = 0.5 * Math.exp(-i / (sr * 0.012)) * Math.sin(2 * Math.PI * 196 * i / sr); } // tap：すぐ止まる短い音
+      }
+      const src = ctx.createBufferSource(); src.buffer = b; src.connect(input); src.start();
+    }
+
+    return { start, stop, arm, disarm, live, testPlay, testNoise, TEST, get active() { return active; } };
   })();
 
   let toastTimer = 0;
@@ -1444,7 +1481,7 @@
   window.__ft = {
     S, settings, Clock,
     get stats() { return stats; }, get progress() { return progress; },
-    micPlay: (midi) => Mic.testPlay(midi), get micActive() { return Mic.active; }, get plucks() { return Sound.plucks; }
+    micPlay: (midi) => Mic.testPlay(midi), micNoise: (k) => Mic.testNoise(k), get micActive() { return Mic.active; }, get plucks() { return Sound.plucks; }
   };
 
   renderSoundBtn();
