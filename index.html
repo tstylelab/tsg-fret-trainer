@@ -245,19 +245,20 @@ main { max-width: 980px; margin: 0 auto; padding: 14px 16px 8px; }
 
 /* ---------- 出題カード ---------- */
 .quiz { padding: 12px 16px 10px; }
-.q-row { display: flex; align-items: center; gap: 12px; min-height: 78px; }
+.q-row { display: flex; align-items: center; gap: 16px; min-height: 132px; }
 .q-main { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.sbadge { font-family: var(--num); font-weight: 600; font-size: 24px; color: #fff; border-radius: 12px; padding: 4px 12px; line-height: 1.25; white-space: nowrap; }
-.sbadge small { font-family: var(--jp); font-size: 15px; font-weight: 700; margin-left: 1px; }
+.sbadge { font-family: var(--num); font-weight: 700; font-size: 64px; color: #fff; border-radius: 18px; padding: 6px 18px 8px; line-height: 1.05; white-space: nowrap; }
+.sbadge small { font-family: var(--jp); font-size: 30px; font-weight: 900; margin-left: 2px; }
 .sbadge.s6 { background: var(--s6); } .sbadge.s5 { background: var(--s5); } .sbadge.s4 { background: var(--s4); }
 .sbadge.s3 { background: var(--s3); } .sbadge.s2 { background: var(--s2); } .sbadge.s1 { background: var(--s1); }
-.q-of { font-size: 16px; font-weight: 700; color: var(--ink2); }
+.q-of { font-size: 18px; font-weight: 700; color: var(--ink2); }
 .q-note { display: flex; flex-direction: column; align-items: center; line-height: 1; }
-.q-note .nm { font-family: var(--num); font-weight: 700; font-size: 58px; letter-spacing: .01em; }
-.q-note .kn { font-size: 12px; color: var(--muted); font-weight: 700; margin-top: 3px; }
+.q-note .nm { font-family: var(--num); font-weight: 700; font-size: 116px; letter-spacing: .01em; line-height: .95; }
+.q-note .kn { font-size: 15px; color: var(--muted); font-weight: 700; margin-top: 4px; }
 .acc { font-family: var(--jp); font-size: .52em; font-weight: 700; vertical-align: .72em; margin-left: -.04em; line-height: 0; }
 .fb-text .sub .acc { font-size: .72em; margin-left: 0; }
-.q-ask { font-size: 16px; font-weight: 700; color: var(--ink2); white-space: nowrap; }
+.q-note .nm .acc { font-size: .42em; vertical-align: 1.05em; margin-left: .02em; }
+.q-ask { font-size: 18px; font-weight: 700; color: var(--ink2); white-space: nowrap; }
 .q-count { font-size: 18px; font-weight: 700; color: var(--ink2); }
 .q-count .big { font-family: var(--num); font-size: 52px; color: var(--ink); margin-left: 8px; vertical-align: -6px; }
 .q-main.pop { animation: qpop .22s ease-out; }
@@ -546,11 +547,13 @@ body[data-phase="quiz"] .tools, body[data-phase="quiz"] .copy { display: none; }
   .opts { grid-template-columns: 1fr; gap: 10px; }
   .setup { padding: 14px 12px; }
   .quiz { padding: 8px 12px 8px; }
-  .q-row { min-height: 66px; gap: 8px; }
-  .q-note .nm { font-size: 48px; }
-  .sbadge { font-size: 21px; padding: 3px 9px; }
+  .q-row { min-height: 104px; gap: 8px; }
+  .q-note .nm { font-size: 92px; }
+  .q-note .kn { font-size: 13px; margin-top: 2px; }
+  .sbadge { font-size: 50px; padding: 4px 12px 6px; border-radius: 14px; }
+  .sbadge small { font-size: 24px; }
   .q-of, .q-ask { font-size: 15px; }
-  .dots { max-width: 34%; gap: 4px; }
+  .dots { max-width: 24%; gap: 4px; }
   .dots i { width: 8px; height: 8px; }
   .feedback { min-height: 62px; margin-top: 4px; padding-top: 6px; }
   .fb-text { font-size: 13.5px; }
@@ -571,11 +574,22 @@ body[data-phase="quiz"] .tools, body[data-phase="quiz"] .copy { display: none; }
 }
 @media (max-width: 380px) {
   .brand-main { font-size: 1.55rem; }
-  .q-note .nm { font-size: 42px; }
+  .q-note .nm { font-size: 80px; }
+  .sbadge { font-size: 44px; padding: 4px 10px 5px; }
+  .sbadge small { font-size: 21px; }
   .q-ask { display: none; }
   .dots i { width: 7px; height: 7px; }
   .dots { gap: 3px; }
   .counter { font-size: 17px; }
+}
+/* 背の低いスマホ（縦向き・高さ700px以下）：出題の文字を少し控えめにして指板を1画面に */
+@media (max-width: 639px) and (max-height: 700px) and (orientation: portrait) {
+  .q-row { min-height: 84px; }
+  .q-note .nm { font-size: 76px; }
+  .q-note .kn { font-size: 12px; margin-top: 0; }
+  .sbadge { font-size: 42px; padding: 3px 10px 4px; }
+  .sbadge small { font-size: 20px; }
+  .feedback { min-height: 54px; }
 }
 /* スマホ横向きなど背の低い画面：出題カードを横並びにして指板の場所を確保 */
 @media (max-height: 520px) and (orientation: landscape) {
@@ -584,8 +598,10 @@ body[data-phase="quiz"] .tools, body[data-phase="quiz"] .copy { display: none; }
   .brand-main svg { width: 14px; height: 32px; }
   main { padding-top: 8px; }
   .quiz { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 16px; align-items: center; padding: 6px 14px; }
-  .q-row { min-height: 52px; }
-  .q-note .nm { font-size: 40px; }
+  .q-row { min-height: 70px; }
+  .q-note .nm { font-size: 64px; }
+  .sbadge { font-size: 34px; padding: 3px 10px 4px; border-radius: 12px; }
+  .sbadge small { font-size: 17px; }
   .beats { margin-top: 0; }
   .feedback { grid-column: 1 / -1; min-height: 42px; margin-top: 2px; padding-top: 4px; }
   .board-card { margin-top: 8px; padding: 6px 10px 8px; }
